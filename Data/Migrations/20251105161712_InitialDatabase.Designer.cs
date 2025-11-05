@@ -12,8 +12,8 @@ using project_z_backend.Data;
 namespace project_z_backend.Data.Migrations
 {
     [DbContext(typeof(ProjectZContext))]
-    [Migration("20251105152647_inital database")]
-    partial class initaldatabase
+    [Migration("20251105161712_InitialDatabase")]
+    partial class InitialDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
