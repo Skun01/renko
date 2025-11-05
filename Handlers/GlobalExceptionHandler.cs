@@ -1,6 +1,8 @@
 using System;
+using System.Text.Json;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using project_z_backend.Share;
 
 namespace project_z_backend.Handlers;
 
@@ -24,15 +26,34 @@ public class GlobalExceptionHandler : IExceptionHandler
             "An error has ocurr: {message}", exception.Message
         );
 
-        // Send error to response:
-        var problemDetails = new ProblemDetails
+        // check error type to response matching error
+        var response = exception switch
         {
-            Status = StatusCodes.Status500InternalServerError,
-            Title = "Server error",
-            Detail = "An internal Server Error has Occur"
+            BadHttpRequestException => ApiResponse.ErrorResponse(
+                "Invalid request format",
+                new List<string> { "The request body is not valid" },
+                400),
+            JsonException => ApiResponse.ErrorResponse(
+                "Invalid JSON format",
+                new List<string> { "The request body contains invalid JSON" },
+                400),
+            UnauthorizedAccessException => ApiResponse.ErrorResponse(
+                "Unauthorized access",
+                new List<string> { "You are not authorized to access this resource" },
+                401),
+            ArgumentException argEx => ApiResponse.ErrorResponse(
+                "Invalid argument",
+                new List<string> { argEx.Message },
+                400),
+            _ => ApiResponse.ErrorResponse(
+                "An unexpected error occurred",
+                new List<string> { "Internal server error" },
+                500)
         };
-        httpContext.Response.StatusCode = problemDetails.Status.Value;
-        await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
+
+        // setting to response
+        httpContext.Response.StatusCode = response.StatusCode ?? 500;
+        await httpContext.Response.WriteAsJsonAsync(response, cancellationToken);
 
         return true;
     }
