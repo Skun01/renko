@@ -24,7 +24,6 @@
     <Folder Include="Endpoints\" />
     <Folder Include="Mapping\" />
     <Folder Include="Services\" />
-    <Folder Include="Share\" />
   </ItemGroup>
 
 </Project>
