@@ -8,7 +8,5 @@ public class User : BaseEntity
     public required string UserName { set; get; }
     public required string PasswordHash { set; get; }
     public required string Email { set; get; }
-
-    public Guid RoleId { set; get; }
     public virtual Role? Role { set; get; }
 }

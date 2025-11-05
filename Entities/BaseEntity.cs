@@ -6,7 +6,7 @@ namespace project_z_backend.Entities;
 public class BaseEntity
 {
     [Key]
-    public required Guid Id { set; get; }
-    public DateTime CreatedAt { set; get; } = DateTime.Now;
+    public Guid Id { set; get; } = Guid.NewGuid();
+    public DateTime CreatedAt { set; get; }
     public DateTime UpdatedAt { set; get; }
 }
