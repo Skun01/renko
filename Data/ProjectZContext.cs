@@ -31,6 +31,7 @@ public class ProjectZContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         // Seeding Role data
+        DateTime seedDate = new DateTime(2025, 11, 5, 0, 0, 0, DateTimeKind.Utc);
         modelBuilder.Entity<Role>().HasData([
             new Role {
                 Id = Guid.Parse(RoleConstants.UserRoleId),
@@ -40,22 +41,22 @@ public class ProjectZContext : DbContext
             {
                 Id = Guid.Parse(RoleConstants.ContributorRoleId), 
                 Name = RoleConstants.ContributorRoleName,       
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                CreatedAt = seedDate,
+                UpdatedAt = seedDate
             },
             new Role
             {
                 Id = Guid.Parse(RoleConstants.TeacherRoleId),
                 Name = RoleConstants.TeacherRoleName,         
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                CreatedAt = seedDate,
+                UpdatedAt = seedDate
             },
             new Role
             {
                 Id = Guid.Parse(RoleConstants.AdminRoleId), 
                 Name = RoleConstants.AdminRoleName,        
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                CreatedAt = seedDate,
+                UpdatedAt = seedDate
             }
         ]);
     }

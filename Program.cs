@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using project_z_backend.Data;
 using project_z_backend.Extensions;
 using Serilog;
 
@@ -11,13 +13,15 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 builder.Host.UseSerilog();
+string connectionString = builder.Configuration["ConnectionStrings:Sql"]!;
 
-// Configure Swagger
-builder.Services.AddSwaggerDocumentation();
+// SERVICES:
+builder.Services.AddSwaggerDocumentation(); // Config Swagger
+builder.Services.AddDbContext<ProjectZContext>(options => options.UseSqlServer(connectionString)); // config db connection
+
 
 var app = builder.Build();
-
-// MIDDLEWARES
+// MIDDLEWARES:
 app.UseSerilogRequestLogging();
 app.UseSwaggerDocumentation();
 app.UseHttpsRedirection();
