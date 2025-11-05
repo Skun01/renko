@@ -29,6 +29,8 @@ public class ProjectZContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        // Seeding Role data
         modelBuilder.Entity<Role>().HasData([
             new Role {
                 Id = Guid.Parse(RoleConstants.UserRoleId),

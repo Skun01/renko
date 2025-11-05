@@ -174,3 +174,4 @@ D:\fullstack_project\project_z_backend\obj\Debug\net9.0\ref\project_z_backend.dl
 D:\fullstack_project\project_z_backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
 D:\fullstack_project\project_z_backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\fullstack_project\project_z_backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\fullstack_project\project_z_backend\obj\Debug\net9.0\project_z_backend.sourcelink.json
