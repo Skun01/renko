@@ -67,6 +67,24 @@ public class UserRepository : IUserRepository
         }
     }
 
+    public async Task<Result<User>> GetByEmailAsync(string email)
+    {
+        try
+        {
+            var user = await _context.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Email == email);
+            if (user is null)
+                return Result.Failure<User>(Error.NotFound("User not found"));
+
+            return Result.Success(user);
+        }catch(Exception ex)
+        {
+            _logger.LogError("Cannot get user by email: {message}", ex.Message);
+            return Result.Failure<User>(Error.BadRequest("Cannot get user by email"));
+        }
+    }
+
     public async Task<Result<User>> GetByIdAsync(Guid id)
     {
         try
