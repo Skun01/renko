@@ -27,7 +27,6 @@ builder.Services.AddDbContext<ProjectZContext>(
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>(); // global exception
 builder.Services.AddValidatorsFromAssemblyContaining<Program>(); // Register all validators 
-builder.Services.AddFluentValidationAutoValidation(); // Filter to Endpoints to check data request
 builder.Services.AddRepositories();
 builder.Services.AddCustomServicesInjection();
 

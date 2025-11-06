@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
 using project_z_backend.DTOs.Auth;
+using project_z_backend.Filters;
 using project_z_backend.Interfaces.Services;
 using project_z_backend.Mapping;
 
@@ -20,7 +21,7 @@ public static class AuthEndpoints
         {
             var result = await authService.RegisterAsync(request);
             return result.ToApiResponse("Create user success");
-        });
+        }).AddEndpointFilter<ValidationFilter<RegisterRequest>>();
 
         return group;
     }
