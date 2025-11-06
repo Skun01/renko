@@ -13,7 +13,7 @@ public class ProjectZContext : DbContext
     public ProjectZContext(DbContextOptions<ProjectZContext> options) : base(options) { }
 
     // Custom SaveChangesAsync
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var entries = ChangeTracker.Entries<BaseEntity>();
         foreach (var entry in entries)
