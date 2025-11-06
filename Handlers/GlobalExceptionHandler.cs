@@ -1,4 +1,5 @@
 using System.Text.Json;
+using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using project_z_backend.Share;
 
@@ -43,6 +44,10 @@ public class GlobalExceptionHandler : IExceptionHandler
                 "Invalid argument",
                 new List<string> { argEx.Message },
                 400),
+            ValidationException valEx => ApiResponse.ErrorResponse(
+                "Request data is not valid",
+                valEx.Errors.Select(e => e.ErrorMessage).ToList(),
+                400),
             _ => ApiResponse.ErrorResponse(
                 "An unexpected error occurred",
                 new List<string> { "Internal server error" },
@@ -50,7 +55,7 @@ public class GlobalExceptionHandler : IExceptionHandler
         };
 
         // setting to response
-        httpContext.Response.StatusCode = response.StatusCode ?? 500;
+        httpContext.Response.StatusCode = response.StatusCode ?? 500;   
         await httpContext.Response.WriteAsJsonAsync(response, cancellationToken);
 
         return true;

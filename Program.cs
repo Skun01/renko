@@ -1,3 +1,5 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using project_z_backend.Data;
 using project_z_backend.Extensions;
@@ -23,6 +25,8 @@ builder.Services.AddDbContext<ProjectZContext>(
 );
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>(); // global exception
+builder.Services.AddValidatorsFromAssemblyContaining<Program>(); // Register all validators 
+builder.Services.AddFluentValidationAutoValidation(); // Filter to Endpoints to check data request
 
 var app = builder.Build();
 // MIDDLEWARES:
