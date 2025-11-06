@@ -2,6 +2,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using project_z_backend.Data;
+using project_z_backend.Endpoints;
 using project_z_backend.Extensions;
 using project_z_backend.Handlers;
 using Serilog;
@@ -28,6 +29,7 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>(); // global except
 builder.Services.AddValidatorsFromAssemblyContaining<Program>(); // Register all validators 
 builder.Services.AddFluentValidationAutoValidation(); // Filter to Endpoints to check data request
 builder.Services.AddRepositories();
+builder.Services.AddCustomServicesInjection();
 
 var app = builder.Build();
 // MIDDLEWARES:
@@ -36,7 +38,8 @@ app.UseSwaggerDocumentation();
 app.UseHttpsRedirection();
 app.UseExceptionHandler();
 
-app.MapGet("greeting", () => "Hello you guy!");
+var version = app.MapGroup("/v1");
+version.MapAuthEndpoints("/auth");
 app.Run();
 
 

@@ -9,7 +9,7 @@ public class ApiResponse<T>
     public List<string>? Errors { set; get; }
     public T? Data { set; get; }
     public string? Message { set; get; }
-    public int StatusCode { set; get; }
+    public int? StatusCode { set; get; }
     public DateTime Timestamp { set; get; } = DateTime.UtcNow;
     public static ApiResponse<T> SuccessResponse(T data, string? message = null)
     {
@@ -41,7 +41,6 @@ public class ApiResponse
     public string? Message { get; set; }
     public List<string>? Errors { get; set; }
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
-    public string? TraceId { get; set; }
     public int? StatusCode { get; set; }
 
     public static ApiResponse SuccessResponse(string? message = null)

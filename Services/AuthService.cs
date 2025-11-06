@@ -1,5 +1,3 @@
-using System;
-using BCrypt.Net;
 using project_z_backend.DTOs.Auth;
 using project_z_backend.Entities;
 using project_z_backend.Interfaces.Repositories;

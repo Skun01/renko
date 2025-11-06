@@ -8,6 +8,10 @@ D:\fullstack_project\project_z_backend\bin\Debug\net9.0\project_z_backend.dll
 D:\fullstack_project\project_z_backend\bin\Debug\net9.0\project_z_backend.pdb
 D:\fullstack_project\project_z_backend\bin\Debug\net9.0\Azure.Core.dll
 D:\fullstack_project\project_z_backend\bin\Debug\net9.0\Azure.Identity.dll
+D:\fullstack_project\project_z_backend\bin\Debug\net9.0\BCrypt.Net-Next.dll
+D:\fullstack_project\project_z_backend\bin\Debug\net9.0\FluentValidation.dll
+D:\fullstack_project\project_z_backend\bin\Debug\net9.0\FluentValidation.AspNetCore.dll
+D:\fullstack_project\project_z_backend\bin\Debug\net9.0\FluentValidation.DependencyInjectionExtensions.dll
 D:\fullstack_project\project_z_backend\bin\Debug\net9.0\Humanizer.dll
 D:\fullstack_project\project_z_backend\bin\Debug\net9.0\Microsoft.AspNetCore.OpenApi.dll
 D:\fullstack_project\project_z_backend\bin\Debug\net9.0\Microsoft.Bcl.AsyncInterfaces.dll
@@ -55,6 +59,9 @@ D:\fullstack_project\project_z_backend\bin\Debug\net9.0\Serilog.Settings.Configu
 D:\fullstack_project\project_z_backend\bin\Debug\net9.0\Serilog.Sinks.Console.dll
 D:\fullstack_project\project_z_backend\bin\Debug\net9.0\Serilog.Sinks.Debug.dll
 D:\fullstack_project\project_z_backend\bin\Debug\net9.0\Serilog.Sinks.File.dll
+D:\fullstack_project\project_z_backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+D:\fullstack_project\project_z_backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\fullstack_project\project_z_backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 D:\fullstack_project\project_z_backend\bin\Debug\net9.0\System.ClientModel.dll
 D:\fullstack_project\project_z_backend\bin\Debug\net9.0\System.CodeDom.dll
 D:\fullstack_project\project_z_backend\bin\Debug\net9.0\System.Composition.AttributedModel.dll
@@ -157,6 +164,7 @@ D:\fullstack_project\project_z_backend\obj\Debug\net9.0\project_z_backend.Assemb
 D:\fullstack_project\project_z_backend\obj\Debug\net9.0\project_z_backend.csproj.CoreCompileInputs.cache
 D:\fullstack_project\project_z_backend\obj\Debug\net9.0\project_z_backend.MvcApplicationPartsAssemblyInfo.cs
 D:\fullstack_project\project_z_backend\obj\Debug\net9.0\project_z_backend.MvcApplicationPartsAssemblyInfo.cache
+D:\fullstack_project\project_z_backend\obj\Debug\net9.0\project_z_backend.sourcelink.json
 D:\fullstack_project\project_z_backend\obj\Debug\net9.0\rjimswa.dswa.cache.json
 D:\fullstack_project\project_z_backend\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
 D:\fullstack_project\project_z_backend\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
@@ -171,7 +179,3 @@ D:\fullstack_project\project_z_backend\obj\Debug\net9.0\refint\project_z_backend
 D:\fullstack_project\project_z_backend\obj\Debug\net9.0\project_z_backend.pdb
 D:\fullstack_project\project_z_backend\obj\Debug\net9.0\project_z_backend.genruntimeconfig.cache
 D:\fullstack_project\project_z_backend\obj\Debug\net9.0\ref\project_z_backend.dll
-D:\fullstack_project\project_z_backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
-D:\fullstack_project\project_z_backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
-D:\fullstack_project\project_z_backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
-D:\fullstack_project\project_z_backend\obj\Debug\net9.0\project_z_backend.sourcelink.json
