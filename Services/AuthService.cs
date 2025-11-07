@@ -4,16 +4,19 @@ using project_z_backend.Interfaces.Repositories;
 using project_z_backend.Interfaces.Services;
 using project_z_backend.Mapping;
 using project_z_backend.Share;
+using project_z_backend.Share.Constants;
 
 namespace project_z_backend.Services;
 
 public class AuthService : IAuthService
 {
     private readonly IUserRepository _userRepo;
+    private readonly IRoleRepository _roleRepo;
     private readonly ITokenService _tokenService;
-    public AuthService(IUserRepository userRepository, ITokenService tokenService)
+    public AuthService(IUserRepository userRepository, IRoleRepository roleRepository, ITokenService tokenService)
     {
         _userRepo = userRepository;
+        _roleRepo = roleRepository;
         _tokenService = tokenService;
     }
 
@@ -43,13 +46,22 @@ public class AuthService : IAuthService
     public async Task<Result> RegisterAsync(RegisterRequest request)
     {
         var existingUser = await _userRepo.GetByEmailAsync(request.Email);
-        if (existingUser.IsSuccess)
+        if (existingUser.Value is not null)
             return Result.Failure(Error.Conflict("User email already exist"));
 
         // Create user:
         string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
-        
+
         User newUser = request.ToEntity(passwordHash);
+
+        // get default user role
+        var userRoleResult = await _roleRepo.GetByNameAsync(RoleConstants.UserRoleName);
+        if (userRoleResult.IsFalure)
+            return Result.Failure(Error.InternalError("Does not found role 'user"));
+
+        var userRole = userRoleResult.Value;
+        newUser.Roles.Add(userRole!);
+
         return await _userRepo.AddAsync(newUser);
     }
 }

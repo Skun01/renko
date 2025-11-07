@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using project_z_backend.Data;
 
@@ -11,9 +12,11 @@ using project_z_backend.Data;
 namespace project_z_backend.Data.Migrations
 {
     [DbContext(typeof(ProjectZContext))]
-    partial class ProjectZContextModelSnapshot : ModelSnapshot
+    [Migration("20251107041307_modify user and role relationship")]
+    partial class modifyuserandrolerelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

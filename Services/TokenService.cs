@@ -30,6 +30,12 @@ public class TokenService : ITokenService
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
         };
 
+        // add role to token
+        foreach(var role in user.Roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role.Name));
+        }
+
         // Create token 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
