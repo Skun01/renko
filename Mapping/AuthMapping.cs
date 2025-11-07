@@ -12,7 +12,8 @@ public static class AuthMapping
         {
             UserName = request.Username,
             Email = request.Email,
-            PasswordHash = passwordHash
+            PasswordHash = passwordHash,
+            IsEmailVerified = false
         };
     } 
 }

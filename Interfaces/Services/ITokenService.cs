@@ -7,6 +7,7 @@ public interface ITokenService
 {
     string CreateAccessToken(User user);
     string CreateEmailConfirmationToken(User user);
+    Guid? GetUserIdFromEmailVerifyToken(string token);
 }
 
 

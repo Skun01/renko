@@ -14,13 +14,14 @@ public static class AuthEndpoints
         var group = app.MapGroup(routePrefix)
             .WithTags("Auth");
 
-        group.MapPost("/register", async (
+        group.MapPost("/register", async(
+            [FromBody] RegisterRequest request,
             IAuthService authService,
-            [FromBody] RegisterRequest request
+            HttpContext context
         ) =>
         {
-            var result = await authService.RegisterAsync(request);
-            return result.ToApiResponse("Create user success");
+            var result = await authService.RegisterAsync(request, context, "confirmEmailEndpoint");
+            return result.ToApiResponse("Check email to verify your email.");
         }).AddEndpointFilter<ValidationFilter<RegisterRequest>>();
 
         group.MapPost("/login", async (
@@ -40,6 +41,15 @@ public static class AuthEndpoints
             var result = await authService.GetCurrentUserLoginAsync(context);
             return result.ToApiResponse("Get current user information sucess");
         }).RequireAuthorization();
+
+        group.MapGet("/confirm-email", async (
+            [FromQuery] string token,
+            IAuthService authService
+        ) =>
+        {
+            var result = await authService.VerifyEmailAsync(token);
+            return result.ToApiResponse("Verify email successful.");
+        }).WithName("confirmEmailEndpoint");
         return group;
     }
 }

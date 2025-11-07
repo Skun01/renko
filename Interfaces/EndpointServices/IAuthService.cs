@@ -7,7 +7,9 @@ namespace project_z_backend.Interfaces.Services;
 
 public interface IAuthService
 {
-    Task<Result> RegisterAsync(RegisterRequest request);
+    Task<Result> RegisterAsync(RegisterRequest request, HttpContext context, string targetEndpointName);
     Task<Result<LoginResponse>> LoginAsync(LoginRequest request);
     Task<Result<UserResponse>> GetCurrentUserLoginAsync(HttpContext httpContext);
+    Task<Result> VerifyEmailAsync(string token);
+
 }

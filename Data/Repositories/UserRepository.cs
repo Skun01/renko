@@ -124,4 +124,29 @@ public class UserRepository : IUserRepository
             return Result.Failure(Error.Conflict("Cannot update User"));
         }
     }
+
+    public async Task<Result> UpdateVerifyEmailByIdAsync(Guid userId, bool isEmailVerified)
+    {
+        try
+        {
+            var affectedRows = await _context.Users
+            .Where(u => u.Id == userId)
+            .ExecuteUpdateAsync(s => s.SetProperty(
+                u => u.IsEmailVerified, 
+                isEmailVerified
+            ));
+
+            if (affectedRows == 0)
+            {
+                return Result.Failure(Error.NotFound("User not found"));
+            }
+
+            return Result.Success();
+        }
+        catch(DbUpdateException dbEx)
+        {
+            _logger.LogError(dbEx, "Database error updating email verification.");
+            return Result.Failure(Error.InternalError("Error updating user"));
+        }
+    }
 }

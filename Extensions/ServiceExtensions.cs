@@ -1,4 +1,6 @@
+using Microsoft.Identity.Client;
 using Microsoft.OpenApi.Models;
+using project_z_backend.Interfaces;
 using project_z_backend.Interfaces.Services;
 using project_z_backend.Services;
 
@@ -47,9 +49,10 @@ public static class ServiceExtensions
 
     public static IServiceCollection AddCustomServicesInjection(this IServiceCollection services)
     {
-        services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ITokenService, TokenService>();
-        
+        services.AddScoped<IEmailSenderService, EmailSenderService>();
+        services.AddScoped<IEmailTemplateService, EmailTemplateService>();
+
         return services;
     }
 }

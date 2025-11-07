@@ -7,4 +7,5 @@ namespace project_z_backend.Interfaces.Repositories;
 public interface IUserRepository : IGenericRepository<User>
 {
     Task<Result<User>> GetByEmailAsync(string email);
+    Task<Result> UpdateVerifyEmailByIdAsync(Guid userId, bool isEmailVerified);
 }

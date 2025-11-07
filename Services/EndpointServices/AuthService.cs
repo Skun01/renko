@@ -1,8 +1,8 @@
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using project_z_backend.DTOs.Auth;
 using project_z_backend.DTOs.User;
 using project_z_backend.Entities;
+using project_z_backend.Interfaces;
 using project_z_backend.Interfaces.Repositories;
 using project_z_backend.Interfaces.Services;
 using project_z_backend.Mapping;
@@ -16,17 +16,23 @@ public class AuthService : IAuthService
     private readonly IUserRepository _userRepo;
     private readonly IRoleRepository _roleRepo;
     private readonly ITokenService _tokenService;
-    private readonly ILogger<AuthService> _logger;
+    private readonly LinkGenerator _linkGenerator;
+    private readonly IEmailTemplateService _emailTemplateService;
+    private readonly IEmailSenderService _emailSender;
     public AuthService(
         IUserRepository userRepository,
         IRoleRepository roleRepository,
         ITokenService tokenService,
-        ILogger<AuthService> logger)
+        LinkGenerator linkGenerator,
+        IEmailTemplateService emailTemplateService,
+        IEmailSenderService emailSender)
     {
         _userRepo = userRepository;
         _roleRepo = roleRepository;
         _tokenService = tokenService;
-        _logger = logger;
+        _linkGenerator = linkGenerator;
+        _emailTemplateService = emailTemplateService;
+        _emailSender = emailSender;
     }
 
     public async Task<Result<UserResponse>> GetCurrentUserLoginAsync(HttpContext httpContext)
@@ -68,7 +74,7 @@ public class AuthService : IAuthService
         return Result.Success(response);
     }
 
-    public async Task<Result> RegisterAsync(RegisterRequest request)
+    public async Task<Result> RegisterAsync(RegisterRequest request, HttpContext context, string targetEndpointName)
     {
         var existingUser = await _userRepo.GetByEmailAsync(request.Email);
         if (existingUser.IsSuccess)
@@ -87,7 +93,30 @@ public class AuthService : IAuthService
         var userRole = userRoleResult.Value;
         newUser.Roles.Add(userRole!);
 
-        return await _userRepo.AddAsync(newUser);
+        var createUserResult = await _userRepo.AddAsync(newUser);
+        if (createUserResult.IsFalure)
+            return createUserResult;
+
+        // Create and send email confirm token link
+        string token = _tokenService.CreateEmailConfirmationToken(newUser);
+        var callbackUrl = _linkGenerator.GetUriByName(
+            context, targetEndpointName, new { token }
+        );
+
+        string emailTemplate = _emailTemplateService.GetEmailConfirmationTemplate(
+            newUser.UserName,
+            callbackUrl!
+        );
+
+        await _emailSender.SendEmailAsync(newUser.Email, "Confirm your email", emailTemplate);
+        return Result.Success();
     }
 
+    public async Task<Result> VerifyEmailAsync(string token)
+    {
+        Guid? userId = _tokenService.GetUserIdFromEmailVerifyToken(token);
+        if (userId is null)
+            return Result.Failure(Error.BadRequest("Verify Email token is not valid"));
+        return await _userRepo.UpdateVerifyEmailByIdAsync((Guid)userId, true);
+    }
 }

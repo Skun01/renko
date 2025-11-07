@@ -26,8 +26,9 @@ builder.Services.AddDbContext<ProjectZContext>(
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>(); // global exception
 builder.Services.AddValidatorsFromAssemblyContaining<Program>(); // Register all validators 
-builder.Services.AddRepositories();
-builder.Services.AddCustomServicesInjection();
+builder.Services.AddRepositories(); // database repositories
+builder.Services.AddCustomServicesInjection(); // Endpoints service
+builder.Services.AddEndpointServicesInjection(); // other custom services
 builder.Services.AddCustomAuthentication(builder.Configuration);
 
 var app = builder.Build();
