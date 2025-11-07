@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using project_z_backend.DTOs.Auth;
+using project_z_backend.DTOs.User;
 using project_z_backend.Entities;
 using project_z_backend.Interfaces.Repositories;
 using project_z_backend.Interfaces.Services;
@@ -28,20 +29,20 @@ public class AuthService : IAuthService
         _logger = logger;
     }
 
-    public async Task<Result<User>> GetCurrentUserLoginAsync(HttpContext httpContext)
+    public async Task<Result<UserResponse>> GetCurrentUserLoginAsync(HttpContext httpContext)
     {
         var userIdClaim = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (userIdClaim is null)
-            return Result.Failure<User>(Error.BadRequest("Token is invalid"));
+            return Result.Failure<UserResponse>(Error.BadRequest("Token is invalid"));
 
         if (!Guid.TryParse(userIdClaim, out Guid userId))
-            return Result.Failure<User>(Error.BadRequest("User id in token is invalid"));
+            return Result.Failure<UserResponse>(Error.BadRequest("User id in token is invalid"));
 
         var userResult = await _userRepo.GetByIdAsync(userId);
         if(userResult.IsFalure)
-            return Result.Failure<User>(Error.NotFound("User not found"));
+            return Result.Failure<UserResponse>(Error.NotFound("User not found"));
 
-        return Result.Success(userResult.Value);
+        return Result.Success(userResult.Value!.ToResponse());
     }
 
     public async Task<Result<LoginResponse>> LoginAsync(LoginRequest request)

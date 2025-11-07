@@ -56,6 +56,7 @@ public class UserRepository : IUserRepository
         {
             var users = await _context.Users
             .AsNoTracking()
+            .Include(u => u.Roles)
             .ToListAsync();
 
             return Result.Success<IEnumerable<User>>(users);
@@ -91,6 +92,7 @@ public class UserRepository : IUserRepository
         {
             var user = await _context.Users
             .AsNoTracking()
+            .Include(u => u.Roles)
             .FirstOrDefaultAsync(u => u.Id == id);
 
             if (user is null)
