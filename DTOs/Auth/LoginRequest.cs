@@ -1,0 +1,6 @@
+namespace project_z_backend.DTOs.Auth;
+
+public record class LoginRequest(
+    string Email,
+    string Password
+);

@@ -7,4 +7,5 @@ namespace project_z_backend.Interfaces.Services;
 public interface IAuthService
 {
     Task<Result> RegisterAsync(RegisterRequest request);
+    Task<Result<LoginResponse>> LoginAsync(LoginRequest request);
 }

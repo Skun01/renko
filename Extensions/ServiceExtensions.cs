@@ -16,7 +16,8 @@ public static class ServiceExtensions
     public static IServiceCollection AddCustomServicesInjection(this IServiceCollection services)
     {
         services.AddScoped<IAuthService, AuthService>();
-
+        services.AddScoped<ITokenService, TokenService>();
+        
         return services;
     }
 }

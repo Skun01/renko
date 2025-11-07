@@ -1,5 +1,4 @@
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using project_z_backend.Data;
 using project_z_backend.Endpoints;
@@ -29,6 +28,7 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>(); // global except
 builder.Services.AddValidatorsFromAssemblyContaining<Program>(); // Register all validators 
 builder.Services.AddRepositories();
 builder.Services.AddCustomServicesInjection();
+builder.Services.AddCustomAuthentication(builder.Configuration);
 
 var app = builder.Build();
 // MIDDLEWARES:
@@ -40,6 +40,3 @@ app.UseExceptionHandler();
 var version = app.MapGroup("/v1");
 version.MapAuthEndpoints("/auth");
 app.Run();
-
-
-

@@ -23,6 +23,14 @@ public static class AuthEndpoints
             return result.ToApiResponse("Create user success");
         }).AddEndpointFilter<ValidationFilter<RegisterRequest>>();
 
+        group.MapPost("/login", async (
+            IAuthService authService,
+            [FromBody] LoginRequest request
+        ) =>
+        {
+            var result = await authService.LoginAsync(request);
+            return result.ToApiResponse("Login success");
+        });
         return group;
     }
 }

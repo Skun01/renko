@@ -179,3 +179,4 @@ D:\fullstack_project\project_z_backend\obj\Debug\net9.0\refint\project_z_backend
 D:\fullstack_project\project_z_backend\obj\Debug\net9.0\project_z_backend.pdb
 D:\fullstack_project\project_z_backend\obj\Debug\net9.0\project_z_backend.genruntimeconfig.cache
 D:\fullstack_project\project_z_backend\obj\Debug\net9.0\ref\project_z_backend.dll
+D:\fullstack_project\project_z_backend\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

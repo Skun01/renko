@@ -12,4 +12,7 @@ public record class Error(string Code, string Description)
 
     public static Error BadRequest(string message) =>
         new Error("400", message);
+
+    public static Error InternalError(string message) =>
+        new Error("500", message);
 }
