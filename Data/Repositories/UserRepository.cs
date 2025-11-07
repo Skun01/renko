@@ -26,7 +26,7 @@ public class UserRepository : IUserRepository
         catch (DbUpdateException ex)
         {
             _logger.LogError("Error database cannot add User: {message}", ex.Message);
-            return Result.Failure(Error.Conflict("User email already Exist"));
+            return Result.Failure(Error.Conflict("Error cannot add User"));
         }
     }
 

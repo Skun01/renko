@@ -31,6 +31,15 @@ public static class AuthEndpoints
             var result = await authService.LoginAsync(request);
             return result.ToApiResponse("Login success");
         });
+
+        group.MapGet("/me", async (
+            IAuthService authService,
+            HttpContext context
+        ) =>
+        {
+            var result = await authService.GetCurrentUserLoginAsync(context);
+            return result.ToApiResponse("Get current user information sucess");
+        }).RequireAuthorization();
         return group;
     }
 }

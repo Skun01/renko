@@ -12,8 +12,8 @@ using project_z_backend.Data;
 namespace project_z_backend.Data.Migrations
 {
     [DbContext(typeof(ProjectZContext))]
-    [Migration("20251107041307_modify user and role relationship")]
-    partial class modifyuserandrolerelationship
+    [Migration("20251107110554_ModifyUserAndRoleRelationship")]
+    partial class ModifyUserAndRoleRelationship
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace project_z_backend.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class modifyuserandrolerelationship : Migration
+    public partial class ModifyUserAndRoleRelationship : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

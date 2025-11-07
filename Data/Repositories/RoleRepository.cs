@@ -73,7 +73,6 @@ namespace project_z_backend.Data.Repositories
             try
             {
                 var role = await _context.Roles
-                    .AsNoTracking()
                     .FirstOrDefaultAsync(r => r.Id == id);
                 if (role == null)
                 {
@@ -93,7 +92,6 @@ namespace project_z_backend.Data.Repositories
             try
             {
                 var role = await _context.Roles
-                    .AsNoTracking()
                     .FirstOrDefaultAsync(r => r.Name == name);
                 if (role == null)
                 {
