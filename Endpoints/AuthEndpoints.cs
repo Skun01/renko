@@ -20,7 +20,7 @@ public static class AuthEndpoints
             HttpContext context
         ) =>
         {
-            var result = await authService.RegisterAsync(request, context, "confirmEmailEndpoint");
+            var result = await authService.RegisterAsync(request);
             return result.ToApiResponse("Check email to verify your email.");
         }).AddEndpointFilter<ValidationFilter<RegisterRequest>>();
 
@@ -49,7 +49,7 @@ public static class AuthEndpoints
         {
             var result = await authService.VerifyEmailAsync(token);
             return result.ToApiResponse("Verify email successful.");
-        }).WithName("confirmEmailEndpoint");
+        });
         return group;
     }
 }

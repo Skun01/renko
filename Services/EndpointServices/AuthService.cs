@@ -74,7 +74,7 @@ public class AuthService : IAuthService
         return Result.Success(response);
     }
 
-    public async Task<Result> RegisterAsync(RegisterRequest request, HttpContext context, string targetEndpointName)
+    public async Task<Result> RegisterAsync(RegisterRequest request)
     {
         var existingUser = await _userRepo.GetByEmailAsync(request.Email);
         if (existingUser.IsSuccess)
@@ -98,25 +98,19 @@ public class AuthService : IAuthService
             return createUserResult;
 
         // Create and send email confirm token link
-        string token = _tokenService.CreateEmailConfirmationToken(newUser);
-        var callbackUrl = _linkGenerator.GetUriByName(
-            context, targetEndpointName, new { token }
-        );
+        string verifyEmailtoken = _tokenService.CreateEmailConfirmationToken(newUser.Id);
+        var emailSendingResult = await _emailSender.SendVerifyEmailAsync(newUser.UserName, newUser.Email, verifyEmailtoken);
+        if (emailSendingResult.IsFalure)
+            Result.Failure(Error.InternalError("Create user success but cannot send verify email to user"));
 
-        string emailTemplate = _emailTemplateService.GetEmailConfirmationTemplate(
-            newUser.UserName,
-            callbackUrl!
-        );
-
-        await _emailSender.SendEmailAsync(newUser.Email, "Confirm your email", emailTemplate);
         return Result.Success();
     }
 
     public async Task<Result> VerifyEmailAsync(string token)
     {
-        Guid? userId = _tokenService.GetUserIdFromEmailVerifyToken(token);
-        if (userId is null)
-            return Result.Failure(Error.BadRequest("Verify Email token is not valid"));
-        return await _userRepo.UpdateVerifyEmailByIdAsync((Guid)userId, true);
+        var userIdResult = _tokenService.GetUserIdFromEmailVerifyToken(token);
+        if (userIdResult.IsFalure)
+            return Result.Failure(userIdResult.Error!);
+        return await _userRepo.UpdateVerifyEmailByIdAsync(userIdResult.Value, true);
     }
 }

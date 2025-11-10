@@ -30,6 +30,7 @@ builder.Services.AddRepositories(); // database repositories
 builder.Services.AddCustomServicesInjection(); // Endpoints service
 builder.Services.AddEndpointServicesInjection(); // other custom services
 builder.Services.AddCustomAuthentication(builder.Configuration);
+builder.Services.AddOptionSettings(builder.Configuration); // Options Pattern
 
 var app = builder.Build();
 // MIDDLEWARES:

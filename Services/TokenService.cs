@@ -1,29 +1,33 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using project_z_backend.Entities;
 using project_z_backend.Interfaces.Services;
+using project_z_backend.Options;
+using project_z_backend.Share;
 
 namespace project_z_backend.Services;
 
 public class TokenService : ITokenService
 {
-    private readonly IConfiguration _config;
+    private readonly JwtSettings _jwtSettings;
     private readonly SymmetricSecurityKey _secretKey;
-    public TokenService(IConfiguration configuration)
+    private readonly (string ClaimName, string ClaimDes) VerifyEmailClam = ("purpose", "email_confirmation");
+    public TokenService(IOptions<JwtSettings> jwtOptions)
     {
-        _config = configuration;
+        _jwtSettings = jwtOptions.Value;
         _secretKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(_config["Jwt:Key"]!)
+            Encoding.UTF8.GetBytes(_jwtSettings.Key)
         );
     }
     public string CreateAccessToken(User user)
     {
         // Get data from appsettings 
-        var issuer = _config["Jwt:Issuer"];
-        var audience = _config["Jwt:Audience"];
-        var expireHours = int.Parse(_config["Jwt:ExpirationHours"]!);
+        var issuer = _jwtSettings.Issuer;
+        var audience = _jwtSettings.Audience;
+        var expireHours = _jwtSettings.ExpireHours;
         // Create claim
         var claims = new List<Claim>
         {
@@ -56,16 +60,16 @@ public class TokenService : ITokenService
         return tokenHandler.WriteToken(token);
     }
 
-    public string CreateEmailConfirmationToken(User user)
+    public string CreateEmailConfirmationToken(Guid userId)
     {
         var credenticals = new SigningCredentials(_secretKey, SecurityAlgorithms.HmacSha256Signature);
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim("purpose", "email_confirmation")
+            new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+            new Claim(VerifyEmailClam.ClaimName, VerifyEmailClam.ClaimDes)
         };
         var token = new JwtSecurityToken(
-            expires: DateTime.UtcNow.AddHours(int.Parse(_config["Jwt:ExpirationHours"]!)),
+            expires: DateTime.UtcNow.AddHours(_jwtSettings.EmailTokenExpireHours),
             claims: claims,
             signingCredentials: credenticals
         );
@@ -73,10 +77,11 @@ public class TokenService : ITokenService
         return tokenHandler.WriteToken(token);
     }
 
-    public Guid? GetUserIdFromEmailVerifyToken(string token)
+    public Result<Guid> GetUserIdFromEmailVerifyToken(string token)
     {
         if (string.IsNullOrEmpty(token))
-            return null;
+            return Result.Failure<Guid>(Error.BadRequest("Token is null"));
+        
         var tokenHandler = new JwtSecurityTokenHandler();
         var validationParameters = new TokenValidationParameters
         {
@@ -90,19 +95,23 @@ public class TokenService : ITokenService
         try
         {
             var principal = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
-            var purposeClaim = principal.FindFirst("purpose");
-            if (purposeClaim is null || purposeClaim.Value != "email_confirmation")
-                return null;
+            var purposeClaim = principal.FindFirst(VerifyEmailClam.ClaimName);
+            if (purposeClaim is null || purposeClaim.Value != VerifyEmailClam.ClaimDes)
+                return Result.Failure<Guid>(Error.BadRequest("Token is invalid"));
 
             var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim is null || !Guid.TryParse(userIdClaim.Value, out var userId))
-                return null;
+                return Result.Failure<Guid>(Error.BadRequest("Token is invalid"));
 
-            return userId;
+            return Result.Success(userId);
+        }
+        catch (SecurityTokenException)
+        {
+            return Result.Failure<Guid>(Error.BadRequest("Token is invalid or has expired."));
         }
         catch (Exception)
         {
-            return null;
+            return Result.Failure<Guid>(Error.InternalError("Something is wrong when validate verify token"));
         }
     }
 }
