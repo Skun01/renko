@@ -26,10 +26,11 @@ public static class AuthEndpoints
 
         group.MapPost("/login", async (
             IAuthService authService,
-            [FromBody] LoginRequest request
+            [FromBody] LoginRequest request,
+            HttpContext httpContext
         ) =>
         {
-            var result = await authService.LoginAsync(request);
+            var result = await authService.LoginAsync(request, httpContext);
             return result.ToApiResponse("Login success");
         });
 
@@ -49,6 +50,24 @@ public static class AuthEndpoints
         {
             var result = await authService.VerifyEmailAsync(token);
             return result.ToApiResponse("Verify email successful.");
+        });
+
+        group.MapGet("/refresh-token", async (
+            IAuthService authService,
+            HttpContext httpContext
+        ) =>
+        {
+            var result = await authService.RefreshTokenAsync(httpContext);
+            return result.ToApiResponse("refresh token success");
+        }).RequireAuthorization();
+
+        group.MapPost("/logout", async (
+            IAuthService authService,
+            HttpContext httpContext
+        ) =>
+        {
+            var result = await authService.LogoutAsync(httpContext);
+            return result.ToApiResponse("Logout success");
         });
         return group;
     }

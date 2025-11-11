@@ -16,9 +16,11 @@ public class JwtSettings
     [Required]
     public string Audience { get; init; } = null!;
 
-    [Range(1, 720)]
+    [Range(0.1, 72)]
     public int ExpireHours { get; init; }
     
-    [Range(1, 720)]
+    [Range(1, 72)]
     public int EmailTokenExpireHours { get; init; }
+    [Range(1, 100)]
+    public int RefreshTokenExpireDays { get; init; }
 }

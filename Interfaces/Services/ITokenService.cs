@@ -9,6 +9,8 @@ public interface ITokenService
     string CreateAccessToken(User user);
     string CreateEmailConfirmationToken(Guid userId);
     Result<Guid> GetUserIdFromEmailVerifyToken(string token);
+    public string GenerateRefreshToken();
+    public void SetRefreshTokenCookie(HttpContext httpContext, string refreshToken);
 }
 
 

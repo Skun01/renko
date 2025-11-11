@@ -15,4 +15,7 @@ public record class Error(string Code, string Description)
 
     public static Error InternalError(string message) =>
         new Error("500", message);
+
+    public static Error Unauthorized(string message) =>
+        new Error("401", message);
 }

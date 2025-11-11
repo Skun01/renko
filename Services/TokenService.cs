@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -77,6 +78,14 @@ public class TokenService : ITokenService
         return tokenHandler.WriteToken(token);
     }
 
+    public string GenerateRefreshToken()
+    {
+        var randomNumber = new byte[64];
+        using var rn = RandomNumberGenerator.Create();
+        rn.GetBytes(randomNumber);
+        return Convert.ToBase64String(randomNumber);
+    }
+
     public Result<Guid> GetUserIdFromEmailVerifyToken(string token)
     {
         if (string.IsNullOrEmpty(token))
@@ -113,5 +122,18 @@ public class TokenService : ITokenService
         {
             return Result.Failure<Guid>(Error.InternalError("Something is wrong when validate verify token"));
         }
+    }
+
+    public void SetRefreshTokenCookie(HttpContext httpContext, string refreshToken)
+    {
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpireDays)
+        };
+
+        httpContext.Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
     }
 }

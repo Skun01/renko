@@ -10,6 +10,7 @@ public class ProjectZContext : DbContext
 {
     public DbSet<User> Users { set; get; }
     public DbSet<Role> Roles { set; get; }
+    public DbSet<RefreshToken> RefreshTokens { set; get; }
     public ProjectZContext(DbContextOptions<ProjectZContext> options) : base(options) { }
 
     // Custom SaveChangesAsync
